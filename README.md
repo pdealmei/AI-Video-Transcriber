@@ -1,6 +1,6 @@
 # AI Video Transcriber
 
-AI Video Transcriber UI
+![AI Video Transcriber UI](./docs/app-preview.png)
 
 Upload a video, transcribe it with Whisper, and summarize the result using any OpenAI-compatible LLM endpoint.
 
