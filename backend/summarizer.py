@@ -9,7 +9,10 @@ SYSTEM_PROMPT = PROMPT_FILE.read_text().strip()
 
 class Summarizer:
     def __init__(self, summarizer_base_url: str, summarizer_api_key: str, summarizer_model: str):
-        self.llm_client = OpenAI(base_url=summarizer_base_url, api_key=summarizer_api_key)
+        base_url = summarizer_base_url.rstrip("/")
+        if not base_url.endswith("/v1"):
+            base_url = f"{base_url}/v1"
+        self.llm_client = OpenAI(base_url=base_url, api_key=summarizer_api_key)
         self.llm_model = summarizer_model
 
     def get_default_system_prompt(self):

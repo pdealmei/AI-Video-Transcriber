@@ -14,15 +14,8 @@ def extract_audio(video_path: str, audio_path: str) -> str:
         audio_path,
         "-y"
     ]
-    try:
-        subprocess.run(command, 
-                        stdout=subprocess.DEVNULL, 
-                        stderr=subprocess.DEVNULL, 
-                        check=True)
-        return audio_path
-    except Exception as e:
-        print(f"Error extracting audio: {e}")
-        return None
+    subprocess.run(command, capture_output=True, text=True, check=True)
+    return audio_path
 
 def chunk_text(text: str, chunk_size: int = 2000, overlap: int = 200) -> list[str]:
     """Chunk text into smaller chunks with optional overlap."""
