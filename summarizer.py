@@ -1,11 +1,33 @@
-from transformers import pipeline
+from pathlib import Path
 
-def summarize_text(text: str, 
-                    model_name: str = "facebook/bart-large-cnn",
-                    max_length: int = 150,
-                    min_length: int = 30
-                    ) -> str:
-    """Summarize text using a transformer model."""
-    summarizer = pipeline("summarization", model=model_name)
-    summary = summarizer(text, max_length=max_length, min_length=min_length, do_sample=False)
-    return summary[0]["summary_text"]
+from openai import OpenAI
+
+
+# Edit system_prompt.txt to change how the LLM cleans transcriptions
+PROMPT_FILE = Path(__file__).parent / "system_prompt.txt"
+SYSTEM_PROMPT = PROMPT_FILE.read_text().strip()
+
+class Summarizer:
+    def __init__(self, summarizer_base_url: str, summarizer_api_key: str, summarizer_model: str):
+        self.llm_client = OpenAI(base_url=summarizer_base_url, api_key=summarizer_api_key)
+        self.llm_model = summarizer_model
+
+    def get_default_system_prompt(self):
+        return SYSTEM_PROMPT
+
+    def summarize_text(self, text: str) -> str:
+        """Summarize text using a transformer model."""
+        prompt_to_use = self.get_default_system_prompt()
+        response = self.llm_client.chat.completions.create(
+                model=self.llm_model,
+                messages=[
+                    {"role": "system", "content": prompt_to_use},
+                    {"role": "user", "content": text},
+                ],
+                temperature=0.3,
+                max_tokens=200,
+            )
+
+        summary = response.choices[0].message.content.strip()
+
+        return summary

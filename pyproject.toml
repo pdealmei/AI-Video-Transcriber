@@ -1,0 +1,16 @@
+[project]
+name = "ai-video-transcriber"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "certifi>=2026.6.17",
+    "faster-whisper>=1.2.1",
+    "moviepy>=2.2.1",
+    "openai>=2.45.0",
+    "torch>=2.13.0",
+    "torchaudio>=2.11.0",
+    "torchvision>=0.28.0",
+    "transformers<5.0.0",
+]

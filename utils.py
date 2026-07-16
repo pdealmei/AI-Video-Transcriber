@@ -1,3 +1,29 @@
+import subprocess
+import os
+
+def extract_audio(video_path: str, audio_path: str) -> str:
+    """Extract audio from a video file."""
+    if os.path.exists(audio_path):
+        os.remove(audio_path)
+    
+    command = [
+        "ffmpeg",
+        "-i", video_path,
+        "-q:a", "0",
+        "-map", "a",
+        audio_path,
+        "-y"
+    ]
+    try:
+        subprocess.run(command, 
+                        stdout=subprocess.DEVNULL, 
+                        stderr=subprocess.DEVNULL, 
+                        check=True)
+        return audio_path
+    except Exception as e:
+        print(f"Error extracting audio: {e}")
+        return None
+
 def chunk_text(text: str, chunk_size: int = 2000, overlap: int = 200) -> list[str]:
     """Chunk text into smaller chunks with optional overlap."""
     chunks = []
